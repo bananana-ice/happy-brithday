@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Birthday Card</title>
+    <!-- Google Font-->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet"/>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css"/>
+    <style>
+        /* 提示框样式 */
+        .tooltip {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            font-size: 18px;
+            text-align: center;
+            z-index: 2000;
+            animation: fadeInOut 10s ease-in-out;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            10% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            90% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="outside">
+        <div class="front">
+            <p>Happy Birthday</p>
+            <div class="cake">
+                <div class="top-layer"></div>
+                <div class="middle-layer"></div>
+                <div class="bottom-layer"></div>
+                <div class="candle"></div>
+            </div>
+        </div>
+        <div class="back">
+		<p> To Nafisa : </p>
+	</div>
+    </div>
+    <div class="inside">
+        <p> My journey is a sea of stars.
+            The place I want to go is warm in spring.</p>
+
+        <h1><a href="https://www.bilibili.com/video/BV1ab411n7no?vd_source=f7a0239227b49de0e8627f0e0dfae3d4" target="_blank" style="text-decoration: none; color: inherit;" title="点击查看生日祝福视频">&#127873;</a></h1>
+    </div>
+</div>
+<audio id="birthday-music" loop>
+    <source src="music/hb.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 音乐播放按钮 -->
+<button id="music-toggle" class="music-button" title="点击播放/暂停音乐">
+    <span class="icon">🎵</span>
+</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const audio = document.getElementById('birthday-music');
+        const musicButton = document.getElementById('music-toggle');
+        let isPlaying = false;
+        
+        // 尝试在页面加载后自动播放（初始设置为静音）
+        audio.muted = true;
+        audio.play().catch(function(error) {
+            console.log('自动播放失败，需要用户交互:', error);
+        });
+        
+        // 音乐控制按钮点击事件
+        musicButton.addEventListener('click', function() {
+            if (isPlaying) {
+                // 暂停音乐
+                audio.pause();
+                musicButton.classList.remove('playing');
+            } else {
+                // 播放音乐
+                audio.muted = false;
+                audio.play();
+                musicButton.classList.add('playing');
+            }
+            isPlaying = !isPlaying;
+        });
+        
+        // 添加全局点击事件作为后备方案
+        function playOnFirstInteraction() {
+            if (!isPlaying) {
+                audio.muted = false;
+                audio.play().then(function() {
+                    isPlaying = true;
+                    musicButton.classList.add('playing');
+                }).catch(function(error) {
+                    console.log('播放失败:', error);
+                });
+            }
+            document.removeEventListener('click', playOnFirstInteraction);
+            document.removeEventListener('touchstart', playOnFirstInteraction);
+        }
+        
+        document.addEventListener('click', playOnFirstInteraction);
+        document.addEventListener('touchstart', playOnFirstInteraction);
+    });
+</script>
+
+<!-- 提示框 -->
+<div class="tooltip" id="tooltip">
+    点击音乐播放美妙！<br>
+    听完音乐再来打开礼物！
+</div>
+
+<script>
+    // 提示框10秒后自动消失
+    setTimeout(function() {
+        const tooltip = document.getElementById('tooltip');
+        tooltip.style.display = 'none';
+    }, 10000);
+</script>
+
+</body>
+</html>
